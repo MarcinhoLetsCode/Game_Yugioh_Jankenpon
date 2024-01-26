@@ -50,7 +50,9 @@ body{
 
 .score_box {
     background-color: #fff;
-    padding: 30px;
+    padding: 30px 20px;
+    font-size: 0.8rem;
+    width: 100%;
 }
 
 .frame {
@@ -70,13 +72,15 @@ body{
 }
 
 #card-name {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
 }
 
 #card-type {
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 /* Right Side */
 
+.container__left {
 
+}
