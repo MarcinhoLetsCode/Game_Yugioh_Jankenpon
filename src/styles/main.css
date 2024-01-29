@@ -40,6 +40,7 @@ body{
 
 /* Left Side */
 .container__left {
+    /* border: 1px solid red; */
     width: 35%;
     min-width: 300px;
     display: flex;
@@ -133,4 +134,12 @@ body{
     width: 8rem;
     /* border: 1px solid #fff; */
     border-radius: 8px;
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.2);
 }
