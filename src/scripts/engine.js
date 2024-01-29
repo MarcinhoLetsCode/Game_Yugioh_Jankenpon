@@ -64,6 +64,7 @@ async function createCardImage(IdCard, fieldSide){
     cardImage.setAttribute("src", "./src/assets/icons/card-back.png");
     cardImage.setAttribute("data-id", IdCard);
     cardImage.classList.add("card");
+    cardImage.classList.add("playable");
 
     if (fieldSide === playerSides.player1) {
         cardImage.addEventListener("mouseover", ()=>{
@@ -89,15 +90,35 @@ async function setCardsField(cardId){
     state.fieldCards.player.style.display = "block";
     state.fieldCards.computer.style.display = "block";
 
-    //console.log(document.getElementById("computer-cards").getElementsByClassName("card"));
+    let checkCards = document.getElementById("computer-cards").getElementsByClassName("playable");
+    let computerCard = [];
 
-    let computerCard = document.getElementById("computer-cards").getElementsByClassName("card");
-    let computerCardId = Math.floor(Math.random() * computerCard.length);
-    //console.log(computerCard);
-    //console.log(computerCardId);
-    //console.log(computerCard[computerCardId].getAttribute("data-id"));
+    console.log(checkCards);
+    for (let i = 0; i < checkCards.length; i++) {
+        if(checkCards[i].style.display !== 'none'){
+            //alert("diferente");
+            computerCard[i] = checkCards[i];
+        }
+    }
+    
+    console.log(computerCard);
+    if (computerCard.length > 0) {
+        let computerCardId = Math.floor(Math.random() * computerCard.length);
+        //console.log(computerCard);
+        //console.log(computerCardId);
+        //console.log(computerCard[computerCardId].getAttribute("data-id"));
+        
+        state.fieldCards.computer.src = cardData[computerCard[computerCardId].getAttribute("data-id")].img;
+
+
+        console.log(computerCard[computerCardId]);
+        computerCard[computerCardId].classList.remove("playable");
+        computerCard[computerCardId].style.display = 'none';
+        
+    }
+    
+
     state.fieldCards.player.src = cardData[cardId].img;
-    state.fieldCards.computer.src = cardData[computerCard[computerCardId].getAttribute("data-id")].img;
 }
 
 async function drawSelectedCard(index){
