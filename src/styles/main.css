@@ -52,6 +52,7 @@ body{
 .score_box {
     background-color: #fff;
     padding: 30px 20px;
+    text-align: center;
     font-size: 0.8rem;
     width: 100%;
 }
