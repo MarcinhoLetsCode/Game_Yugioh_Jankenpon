@@ -15,6 +15,7 @@ const state = {
     },
     actions: {
         button: document.getElementById("next-duel"),
+        init: document.getElementById("start-duel"),
     },
 };
 
@@ -72,14 +73,64 @@ async function createCardImage(IdCard, fieldSide){
         });
 
         cardImage.addEventListener("click", ()=>{
-            setCardsField(cardImage.getAttribute("data-id"));
+            //console.log(cardImage);
+            //console.log(cardImage.classList.contains("playable") === true);
+            if(cardImage.classList.contains("playable")){
+                for (let i = 0; i < document.getElementById("player-cards").getElementsByClassName("card").length; i++) {
+                    document.getElementById("player-cards").getElementsByClassName("card")[i].classList.add("playable");
+                }
+                setCardsField(cardImage.getAttribute("data-id"));
+                cardImage.classList.remove("playable");
+                state.actions.init.style.display = "block";
+            } else {
+                cardImage.classList.add("playable");
+                //alert('Selecionada Already');
+                removeAllCardsImages();
+            }
+            
         });
     }
     return cardImage;
 }
 
 async function removeAllCardsImages() {
+    state.fieldCards.player.src = "./src/assets/icons/card-front.png";
+    state.fieldCards.player.setAttribute("data-id", "");
+    state.actions.init.style.display = "none";
+}
 
+async function initDuel(){
+    let checkCards = document.getElementById("computer-cards").getElementsByClassName("playable");
+    let computerCard = [];
+
+    //console.log(checkCards);
+    for (let i = 0; i < checkCards.length; i++) {
+        if(checkCards[i].style.display !== 'none'){
+            computerCard[i] = checkCards[i];
+        }
+    }
+    
+    //console.log(computerCard);
+    if (computerCard.length > 0) {
+        let computerCardId = Math.floor(Math.random() * computerCard.length);
+        //console.log(computerCard);
+        //console.log(computerCardId);
+        //console.log(computerCard[computerCardId].getAttribute("data-id"));
+        
+        state.fieldCards.computer.src = cardData[computerCard[computerCardId].getAttribute("data-id")].img;
+        state.fieldCards.computer.setAttribute("data-id", cardData[computerCard[computerCardId].getAttribute("data-id")].id);
+
+        console.log(computerCard[computerCardId]);
+        computerCard[computerCardId].classList.remove("playable");
+        computerCard[computerCardId].style.display = 'none';
+    }
+    //console.log(state.fieldCards.player.getAttribute("data-id"));
+    //console.log(state.fieldCards.computer.getAttribute("data-id"));
+
+    let duelResults = await checkDuelResults(state.fieldCards.player.getAttribute("data-id"), state.fieldCards.computer.getAttribute("data-id"));
+
+    await updateScore();
+    await drawButton(duelResults);
 }
 
 async function setCardsField(cardId){
@@ -90,35 +141,32 @@ async function setCardsField(cardId){
     state.fieldCards.player.style.display = "block";
     state.fieldCards.computer.style.display = "block";
 
-    let checkCards = document.getElementById("computer-cards").getElementsByClassName("playable");
-    let computerCard = [];
+    // let checkCards = document.getElementById("computer-cards").getElementsByClassName("playable");
+    // let computerCard = [];
 
-    console.log(checkCards);
-    for (let i = 0; i < checkCards.length; i++) {
-        if(checkCards[i].style.display !== 'none'){
-            //alert("diferente");
-            computerCard[i] = checkCards[i];
-        }
-    }
+    // console.log(checkCards);
+    // for (let i = 0; i < checkCards.length; i++) {
+    //     if(checkCards[i].style.display !== 'none'){
+    //         computerCard[i] = checkCards[i];
+    //     }
+    // }
     
-    console.log(computerCard);
-    if (computerCard.length > 0) {
-        let computerCardId = Math.floor(Math.random() * computerCard.length);
-        //console.log(computerCard);
-        //console.log(computerCardId);
-        //console.log(computerCard[computerCardId].getAttribute("data-id"));
+    // console.log(computerCard);
+    // if (computerCard.length > 0) {
+    //     let computerCardId = Math.floor(Math.random() * computerCard.length);
+    //     //console.log(computerCard);
+    //     //console.log(computerCardId);
+    //     //console.log(computerCard[computerCardId].getAttribute("data-id"));
         
-        state.fieldCards.computer.src = cardData[computerCard[computerCardId].getAttribute("data-id")].img;
+    //     state.fieldCards.computer.src = cardData[computerCard[computerCardId].getAttribute("data-id")].img;
 
-
-        console.log(computerCard[computerCardId]);
-        computerCard[computerCardId].classList.remove("playable");
-        computerCard[computerCardId].style.display = 'none';
-        
-    }
-    
+    //     console.log(computerCard[computerCardId]);
+    //     computerCard[computerCardId].classList.remove("playable");
+    //     computerCard[computerCardId].style.display = 'none';
+    // }
 
     state.fieldCards.player.src = cardData[cardId].img;
+    state.fieldCards.player.setAttribute("data-id", cardData[cardId].id);
 }
 
 async function drawSelectedCard(index){

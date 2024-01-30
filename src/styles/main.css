@@ -116,7 +116,7 @@ body{
 
 #next-duel {
     display: none;
-    display: block;
+    /* display: block; */
 }
 
 .card-box {
