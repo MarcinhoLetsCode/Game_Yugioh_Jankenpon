@@ -126,9 +126,9 @@ async function clearPlayer() {
 
 async function clearField() {
     state.fieldCards.player.src = "./src/assets/icons/card-front.png";
-    state.fieldCards.player.setAttribute("data-id", "");
+    state.fieldCards.player.setAttribute("data-id", "-1");
     state.fieldCards.computer.src = "./src/assets/icons/card-front.png";
-    state.fieldCards.computer.setAttribute("data-id", "");
+    state.fieldCards.computer.setAttribute("data-id", "-1");
 }
 
 async function removeAllCardsImages() {
@@ -140,7 +140,8 @@ async function removeAllCardsImages() {
 async function resetDuel() {
     state.fieldCards.player.src = "./src/assets/icons/card-front.png";
     state.fieldCards.computer.src = "./src/assets/icons/card-front.png";
-    state.fieldCards.player.setAttribute("data-id", "");
+    state.fieldCards.player.setAttribute("data-id", "-1");
+    state.fieldCards.computer.setAttribute("data-id", "-1");
     state.actions.init.style.display = "none";
     state.actions.button.style.display = "none";
 }
