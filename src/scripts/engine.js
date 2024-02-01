@@ -138,12 +138,27 @@ async function removeAllCardsImages() {
 }
 
 async function resetDuel() {
-    state.fieldCards.player.src = "./src/assets/icons/card-front.png";
-    state.fieldCards.computer.src = "./src/assets/icons/card-front.png";
-    state.fieldCards.player.setAttribute("data-id", "-1");
-    state.fieldCards.computer.setAttribute("data-id", "-1");
-    state.actions.init.style.display = "none";
-    state.actions.button.style.display = "none";
+    if (document.getElementById("player-cards").getElementsByClassName("usada").length === 5) {
+        let limparUsadas = document.getElementById("player-cards").querySelectorAll("img")
+        limparUsadas.forEach((img) => img.classList.remove("usada"));
+        state.actions.button.style.display = "none";
+        clearField();
+        inicialize();
+    } else {
+        //console.log(document.getElementById("player-cards").querySelectorAll("img").style.display = "block");
+        //Avatar
+        state.cardSprites.avatar.src = "";
+        state.cardSprites.name.innerHTML = "Select a Card";
+        state.cardSprites.type.innerText = "------/-------";
+
+        //FieldCards
+        state.fieldCards.player.src = "./src/assets/icons/card-front.png";
+        state.fieldCards.computer.src = "./src/assets/icons/card-front.png";
+        state.fieldCards.player.setAttribute("data-id", "-1");
+        state.fieldCards.computer.setAttribute("data-id", "-1");
+        state.actions.init.style.display = "none";
+        state.actions.button.style.display = "none";
+    }
 }
 
 async function initDuel(){
@@ -186,6 +201,7 @@ async function initDuel(){
     checkCards.forEach((img) => {
         if (!img.classList.contains("playable")) {
             img.style.display = 'none';
+            img.classList.add('usada');
         }
     });
 
@@ -198,7 +214,7 @@ async function initDuel(){
 }
 
 async function updateScore() {
-    document.getElementById("score_points").innerText = `win: ${state.score.playerScore} | Lose: ${state.score.computerScore}`;
+    state.score.scoreBox.innerText = `win: ${state.score.playerScore} | Lose: ${state.score.computerScore}`;
 }
 
 async function drawButton(texto){
@@ -207,15 +223,17 @@ async function drawButton(texto){
 }
 
 async function checkDuelResults(playerCardId, computerCardId){
-    let duelResults = "Draw";
+    let duelResults = "DRAW";
     let playerCard = cardData[playerCardId];
 
     if (playerCard.winOf.includes(parseInt(computerCardId))) {
-        duelResults = "Winner";
+        duelResults = "WINNER";
         state.score.playerScore++;
+        await playAudio("win");
      } else if (playerCard.loseOf.includes(parseInt(computerCardId))) {
-         duelResults = "Lose";
+         duelResults = "LOSER";
          state.score.computerScore++;
+         await playAudio("lose");
      }
 
     console.log(playerCard);
@@ -287,6 +305,11 @@ function inicialize() {
     //state.cardSprites.name.innerHTML = "Dragão Azul";
     //state.score.scoreBox.textContent = `win: ${state.score.playerScore} | Lose: ${state.score.computerScore}`;
     //document.getElementById("score_points").innerHTML = `win: ${state.score.playerScore} | Lose: ${state.score.computerScore}`;
+}
+
+async function playAudio(status){
+    const audio = new Audio(`./src/assets/audios/${status}.wav`);
+    audio.play();
 }
 
 inicialize();
