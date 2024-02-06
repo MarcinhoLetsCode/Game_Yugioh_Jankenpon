@@ -182,8 +182,9 @@ async function initDuel(){
         //console.log(computerCardId);
         //console.log(computerCard[computerCardId].getAttribute("data-id"));
         
-        state.fieldCards.computer.src = cardData[computerCard[computerCardId].getAttribute("data-id")].img;
-        state.fieldCards.computer.setAttribute("data-id", cardData[computerCard[computerCardId].getAttribute("data-id")].id);
+        await DrawCardsInfield('computador', computerCard[computerCardId].getAttribute("data-id"));
+        //state.fieldCards.computer.src = cardData[computerCard[computerCardId].getAttribute("data-id")].img;
+        //state.fieldCards.computer.setAttribute("data-id", cardData[computerCard[computerCardId].getAttribute("data-id")].id);
 
         //console.log(computerCard[computerCardId]);
         computerCard[computerCardId].classList.remove("playable");
@@ -288,6 +289,9 @@ async function DrawCardsInfield(player, cardId){
     if (player === 'jogador') {
         state.fieldCards.player.src = cardData[cardId].img;
         state.fieldCards.player.setAttribute("data-id", cardData[cardId].id);
+    } else if (player === 'computador') {
+        state.fieldCards.computer.src = cardData[cardId].img;
+        state.fieldCards.computer.setAttribute("data-id", cardData[cardId].id);
     }
 }
 
@@ -320,6 +324,10 @@ function inicialize() {
     //drawCards(5, "player");
     drawCards(5, state.playerSides.player1);
     drawCards(5, state.playerSides.computer);
+
+    const bgm = document.getElementById("bgm");
+    bgm.volume = 0.2;
+    bgm.play();
 
     //playerSides.player1;
     //state.score.playerScore++;

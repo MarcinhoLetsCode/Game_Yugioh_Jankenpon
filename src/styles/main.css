@@ -1,5 +1,14 @@
 body{
-    background-color: pink;
+    /* background-color: pink; */
+    cursor: url("../assets/cursor/yugicursor.png"), default;
+}
+
+button,
+a,
+img:hover,
+button:hover,
+a:hover{
+    cursor: url("../assets/cursor/yamiyugicursorGLOW.png"), default;
 }
 
 .bg-video{
