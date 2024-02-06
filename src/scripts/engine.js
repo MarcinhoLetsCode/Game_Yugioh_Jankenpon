@@ -168,7 +168,7 @@ async function initDuel(){
     let checkCards = document.getElementById("computer-cards").getElementsByClassName("playable");
     let computerCard = [];
 
-    console.log(checkCards);
+    //console.log(checkCards);
     for (let i = 0; i < checkCards.length; i++) {
         if(checkCards[i].style.display !== 'none'){
             computerCard[i] = checkCards[i];
@@ -185,7 +185,7 @@ async function initDuel(){
         state.fieldCards.computer.src = cardData[computerCard[computerCardId].getAttribute("data-id")].img;
         state.fieldCards.computer.setAttribute("data-id", cardData[computerCard[computerCardId].getAttribute("data-id")].id);
 
-        console.log(computerCard[computerCardId]);
+        //console.log(computerCard[computerCardId]);
         computerCard[computerCardId].classList.remove("playable");
         computerCard[computerCardId].style.display = 'none';
     }
@@ -218,28 +218,32 @@ async function updateScore() {
 }
 
 async function drawButton(texto){
-    state.actions.button.innerText = texto;
-    console.log(texto);
+    state.actions.button.innerText = texto.toUpperCase();
+    //console.log(texto);
 }
 
 async function checkDuelResults(playerCardId, computerCardId){
-    let duelResults = "DRAW";
+    let duelResults = "draw";
     let playerCard = cardData[playerCardId];
 
     if (playerCard.winOf.includes(parseInt(computerCardId))) {
-        duelResults = "WINNER";
+        duelResults = "winner";
         state.score.playerScore++;
-        await playAudio("win");
+        //await playAudio("win");
      } else if (playerCard.loseOf.includes(parseInt(computerCardId))) {
-         duelResults = "LOSER";
+         duelResults = "loser";
          state.score.computerScore++;
-         await playAudio("lose");
+         
      }
 
-    console.log(playerCard);
-    console.log(computerCardId);
+     if (duelResults == "winner" || duelResults == "loser") {
+        await playAudio(duelResults);  
+     }
 
-    console.log(duelResults);
+    //console.log(playerCard);
+    //console.log(computerCardId);
+
+    //console.log(duelResults);
     return duelResults;
 }
 
@@ -247,8 +251,9 @@ async function setCardsField(cardId){
 
     //let computerCardId = await getRandomCardId();
 
-    state.fieldCards.player.style.display = "block";
-    state.fieldCards.computer.style.display = "block";
+    await ShowHideCards(true);
+    // state.fieldCards.player.style.display = "block";
+    // state.fieldCards.computer.style.display = "block";
 
     // let checkCards = document.getElementById("computer-cards").getElementsByClassName("playable");
     // let computerCard = [];
@@ -274,8 +279,23 @@ async function setCardsField(cardId){
     //     computerCard[computerCardId].style.display = 'none';
     // }
 
-    state.fieldCards.player.src = cardData[cardId].img;
-    state.fieldCards.player.setAttribute("data-id", cardData[cardId].id);
+    await DrawCardsInfield('jogador', cardId);
+    //state.fieldCards.player.src = cardData[cardId].img;
+    //state.fieldCards.player.setAttribute("data-id", cardData[cardId].id);
+}
+
+async function DrawCardsInfield(player, cardId){
+    if (player === 'jogador') {
+        state.fieldCards.player.src = cardData[cardId].img;
+        state.fieldCards.player.setAttribute("data-id", cardData[cardId].id);
+    }
+}
+
+async function ShowHideCards(value) {
+    if (value === true) {
+        state.fieldCards.player.style.display = "block";
+        state.fieldCards.computer.style.display = "block";
+    }
 }
 
 async function drawSelectedCard(index){
@@ -295,6 +315,8 @@ async function drawCards(cardNumbers, fieldSide){
 }
 
 function inicialize() {
+    //state.fieldCards.player.style.display = "none";
+
     //drawCards(5, "player");
     drawCards(5, state.playerSides.player1);
     drawCards(5, state.playerSides.computer);
@@ -309,7 +331,13 @@ function inicialize() {
 
 async function playAudio(status){
     const audio = new Audio(`./src/assets/audios/${status}.wav`);
-    audio.play();
+
+    try {
+        audio.play();
+    } catch {
+
+    }
+    
 }
 
 inicialize();
